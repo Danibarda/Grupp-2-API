@@ -57,5 +57,4 @@ public class CarRepository {
             em.merge(car);
             return Response.ok(car).build();
     }
-
 }

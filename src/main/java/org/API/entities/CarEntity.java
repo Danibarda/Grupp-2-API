@@ -71,5 +71,6 @@ public class CarEntity{
     public void setUser(UserEntity user) {
         this.user = user;
     }
+    
 }
 

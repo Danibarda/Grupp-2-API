@@ -7,8 +7,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "users")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +20,7 @@ public class UserEntity {
     private String username;
     private String password;
     
-    @Column(unique = true)
+    @Column(unique = true, name = "apiKey")
     private String apiKey;
 
     @OneToMany(mappedBy = "user")

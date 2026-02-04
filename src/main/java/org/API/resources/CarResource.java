@@ -4,15 +4,20 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.MediaType;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import org.API.entities.CarEntity;
+import org.API.entities.UpdateMilage;
 import org.API.repositories.CarRepository;
 
 
@@ -41,9 +46,12 @@ public class CarResource {
     }
 
     @POST
-    public Response createCar(CarEntity car) {
+    public Response createCar(CarEntity car) throws URISyntaxException {
+
         car = carRepository.createCar(car);
-        return Response.status(Response.Status.CREATED).entity(car).build();
+
+        URI createdUri = new URI(car.getId().toString());
+        return Response.created(createdUri).entity(car).build();
     }
 
     @DELETE
@@ -53,4 +61,11 @@ public class CarResource {
         return Response.noContent().build();
 
 }
+    @PATCH
+    @Path("/{id}")
+    public Response updateCar(@PathParam("id") Long id, UpdateMilage updateMilage) {
+        return carRepository.updateMilage(id, updateMilage.getMilage());
+    }
+
+
 }

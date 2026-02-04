@@ -20,7 +20,6 @@ import org.API.entities.CarEntity;
 import org.API.entities.UpdateMilage;
 import org.API.repositories.CarRepository;
 
-
 @Path("api/car")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -28,12 +27,12 @@ public class CarResource {
 
     @Inject
     CarRepository carRepository;
-    
+
     @GET
     public Response getCars() {
         List<CarEntity> cars = carRepository.getAllCars();
 
-        if(cars.isEmpty()) {
+        if (cars.isEmpty()) {
             return Response.noContent().build();
         }
         return Response.ok(cars).build();
@@ -42,7 +41,12 @@ public class CarResource {
     @GET
     @Path("/{id}")
     public Response getCarById(@PathParam("id") Long id) {
-        return carRepository.getCarById(id);
+        CarEntity car = carRepository.getCarById(id);
+
+        if (car == null) {
+            return Response.noContent().build();
+        }
+        return Response.ok(car).build();
     }
 
     @POST
@@ -50,7 +54,7 @@ public class CarResource {
 
         car = carRepository.createCar(car);
 
-        URI createdUri = new URI(car.getId().toString());
+        URI createdUri = new URI("api/car/" + car.getId().toString());
         return Response.created(createdUri).entity(car).build();
     }
 
@@ -60,7 +64,8 @@ public class CarResource {
         carRepository.deleteCar(id);
         return Response.noContent().build();
 
-}
+    }
+
     @PATCH
     @Path("/{id}")
     public Response updateCar(@PathParam("id") Long id, UpdateMilage updateMilage) {

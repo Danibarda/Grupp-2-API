@@ -9,6 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response;
 
 
 @Transactional(Transactional.TxType.SUPPORTS)
@@ -24,4 +25,26 @@ public class CarRepository {
                  .getResultList();
         return cars;
     }
+
+
+    public Response getCarById(Long id) {
+        CarEntity car = em.find(CarEntity.class, id);
+        if(car == null) {
+            return Response.noContent().build();
+        }
+        return Response.ok(car).build();
+    }
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public CarEntity createCar(CarEntity car) {
+        em.persist(car);
+        return car;
+        
+    }
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public void deleteCar(Long id) {
+        em.remove(em.find(CarEntity.class, id));
+    }
+
 }

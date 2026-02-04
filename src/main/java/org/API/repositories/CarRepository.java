@@ -47,4 +47,15 @@ public class CarRepository {
         em.remove(em.find(CarEntity.class, id));
     }
 
+    @Transactional(Transactional.TxType.REQUIRED)
+    public Response updateMilage(Long id, int milage) {
+       CarEntity car = em.find(CarEntity.class, id);
+         if(car == null) {
+              return Response.noContent().build();
+         }
+            car.setMilage(milage);
+            em.merge(car);
+            return Response.ok(car).build();
+    }
+
 }

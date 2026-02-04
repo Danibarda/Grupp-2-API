@@ -10,4 +10,5 @@ public class UpdateMilage {
     public void setMilage(int milage) {
         this.milage = milage;
     }
+    
 }

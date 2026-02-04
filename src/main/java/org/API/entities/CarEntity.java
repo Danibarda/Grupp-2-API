@@ -15,7 +15,7 @@ public class CarEntity{
     
     private String manufacturer;
     private int year;
-
+    
     private String model;
     private int milage;
     private String imgUrl;

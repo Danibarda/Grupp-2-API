@@ -66,6 +66,4 @@ public class CarResource {
     public Response updateCar(@PathParam("id") Long id, UpdateMilage updateMilage) {
         return carRepository.updateMilage(id, updateMilage.getMilage());
     }
-
-
 }

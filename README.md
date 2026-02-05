@@ -25,8 +25,8 @@ Ett Rest API byggt med Jakarta EE tillsammans med quarkus för att hantera bilar
   - ***/api/car/{id}***	- Radera vald bil (API-nyckel krävs)
  
   ***Användare***
-  ***/api/users*** - Skapa ny användare
-  ***/api/users/me*** - Hämta dina uppgifter (API-nyckel krävs)
+  - ***/api/users*** - Skapa ny användare
+  - ***/api/users/me*** - Hämta dina uppgifter (API-nyckel krävs)
 
 ## Kör projektet
 ***Klona repo:t***

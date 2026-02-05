@@ -35,6 +35,8 @@ package org.API.repositories;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+
 import org.API.entities.UserEntity;
 
 @ApplicationScoped
@@ -43,7 +45,8 @@ public class UserRepository {
     @PersistenceContext
     EntityManager em;
 
-    public void save(UserEntity user) {
+    @Transactional
+    public void persist(UserEntity user) {
         em.persist(user);
     }
 
@@ -57,6 +60,15 @@ public class UserRepository {
 
         return count > 0;
     }
+
+    public UserEntity saveOrUpdate(UserEntity user) {
+    if (user.getId() == null) {
+        em.persist(user);
+        return user;
+    } else {
+        return em.merge(user);
+    }
+}
 
     public UserEntity findByApiKey(String apiKey) {
         return em.createQuery(

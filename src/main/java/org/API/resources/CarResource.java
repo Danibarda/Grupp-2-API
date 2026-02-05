@@ -4,12 +4,15 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 
 import java.net.URI;
@@ -18,7 +21,12 @@ import java.util.List;
 
 import org.API.entities.CarEntity;
 import org.API.entities.UpdateMilage;
+import org.API.entities.UserEntity;
 import org.API.repositories.CarRepository;
+import org.API.repositories.UserRepository;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 @Path("api/car")
 @Produces(MediaType.APPLICATION_JSON)
@@ -28,7 +36,20 @@ public class CarResource {
     @Inject
     CarRepository carRepository;
 
+    @Inject 
+    UserRepository userRepository;
+
     @GET
+    @Operation(summary="Get all cars", description = "Retrieve a list of all cars in the system")
+    @APIResponse(
+        responseCode = "200", 
+        description = "List of cars retrieved successfully"
+        )
+        @APIResponse(
+            responseCode = "204", 
+            description = "No cars found"
+            )
+
     public Response getCars() {
         List<CarEntity> cars = carRepository.getAllCars();
 
@@ -50,11 +71,13 @@ public class CarResource {
     }
 
     @POST
-    public Response createCar(CarEntity car) throws URISyntaxException {
+    public Response createCar(@HeaderParam("X-API-KEY") String apiKey, CarEntity car) throws URISyntaxException {
 
+        UserEntity user = userRepository.findByApiKey(apiKey);
+        car.setUser(user);
         car = carRepository.createCar(car);
 
-        URI createdUri = new URI("api/car/" + car.getId().toString());
+        URI createdUri = new URI("api/car/" + car.getId());
         return Response.created(createdUri).entity(car).build();
     }
 

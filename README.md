@@ -1,59 +1,49 @@
-# api
+# Grupp 2 API
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Ett Rest API byggt med Jakarta EE tillsammans med quarkus för att hantera bilar samt användare. Detta API innehåller full CRUD-funktionalitet samt kräver autentisiering via API-nycklar.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Funktionalitet:
 
-## Running the application in dev mode
+***Bilhantering:***
+- Visa alla bilar
+- Visa bilar utifrån ditt personliga ID
+- Lägg till nya bilar
+- Uppdatera ägda bilars miltal
+- Radera bilar från din ägo
 
-You can run your application in dev mode that enables live coding using:
+***Användarhantering:***
+- Skapa din användare
+- Hämta dina uppgifter via API-nyckel
 
-```shell script
-./mvnw quarkus:dev
-```
+  ## API-endpoints:
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+  ***Bilhantering***
+  - ***/api/car*** - Visa alla bilar
+  - ***/api/car/{id}*** - Visa bilar utifrån personligt ID
+  - ***/api/car*** - Lägg till ny bil (API-nyckel krävs)
+  - ***/api/car/{id}***	- Uppdatera miltal (API-nyckel krävs)
+  - ***/api/car/{id}***	- Radera vald bil (API-nyckel krävs)
+ 
+  ***Användare***
+  ***/api/users*** - Skapa ny användare
+  ***/api/users/me*** - Hämta dina uppgifter (API-nyckel krävs)
 
-## Packaging and running the application
+## Kör projektet
+***Klona repo:t***
+- git clone<repo-url>
+- cd Grupp-2-API
 
-The application can be packaged using:
+ ***Installera dependencies***
+ - ./mvnw clean install
 
-```shell script
-./mvnw package
-```
+***Konfigurera databasen i "src/main/resources/application.properties":***
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+***Starta utvecklingsmiljö***
+- ./mvnw quarkus:dev
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/api-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
+- API tillgängligt på:: ***http://localhost:8080/api/***
+- Swagger UI tillgängligt på: ***http://localhost:8080/swagger-ui***
+## Relaterade guider
 
 - Hibernate ORM ([guide](https://quarkus.io/guides/hibernate-orm)): Define your persistent model with Hibernate ORM and Jakarta Persistence
 - Narayana JTA - Transaction manager ([guide](https://quarkus.io/guides/transaction)): JTA transaction support
@@ -62,18 +52,4 @@ If you want to learn more about building native executables, please consult <htt
 - SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Document your REST APIs with OpenAPI - comes with Swagger UI
 - JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
 
-## Provided Code
 
-### Hibernate ORM
-
-Create your first JPA entity
-
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
-
-
-
-### RESTEasy JAX-RS
-
-Easily start your RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)

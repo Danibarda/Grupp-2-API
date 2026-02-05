@@ -17,14 +17,24 @@ public class UserResource {
     UserRepository userRepository;
 
     // Create a new user
+    // @POST
+    // @Transactional
+    // public Response createUser(UserEntity user) {
+    //     userRepository.persist(user);
+    //     return Response.status(Response.Status.CREATED)
+    //             .entity(user)
+    //             .build();
+    // }
+
     @POST
-    @Transactional
-    public Response createUser(UserEntity user) {
-        userRepository.save(user);
-        return Response.status(Response.Status.CREATED).build();
-    }
+@Transactional
+public Response createUser(UserEntity user) {
+    UserEntity savedUser = userRepository.saveOrUpdate(user);
+    return Response.status(Response.Status.CREATED).entity(savedUser).build();
+}
 
     // Get user by API key
+    // Behövs verkligen den här?
     @GET
     @Path("/me")
     public Response getMe(@HeaderParam("X-API-KEY") String apiKey) {

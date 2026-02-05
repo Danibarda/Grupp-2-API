@@ -33,19 +33,13 @@ public class CarResource {
     @Inject
     CarRepository carRepository;
 
-    @Inject 
+    @Inject
     UserRepository userRepository;
 
     @GET
-    @Operation(summary="Get all cars", description = "Retrieve a list of all cars in the system")
-    @APIResponse(
-        responseCode = "200", 
-        description = "List of cars retrieved successfully"
-        )
-        @APIResponse(
-            responseCode = "204", 
-            description = "No cars found"
-            )
+    @Operation(summary = "Get all cars", description = "Retrieve a list of all cars in the system")
+    @APIResponse(responseCode = "200", description = "List of cars retrieved successfully")
+    @APIResponse(responseCode = "204", description = "No cars found")
 
     public Response getCars() {
         List<CarEntity> cars = carRepository.getAllCars();
@@ -56,14 +50,25 @@ public class CarResource {
         return Response.ok(cars).build();
     }
 
+
     @GET
-    @Path("/user/{userId}")
-    public Response getCarsByUserId(@PathParam("userId") Long userId) {
-        List<CarEntity> cars = carRepository.getCarsByUserId(userId);
+    @Path("/user")
+    public Response getCarsByUserApiKey(@HeaderParam("X-API-KEY") String apiKey) {
+
+        UserEntity user = userRepository.findByApiKey(apiKey);
+
+        if (user == null) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("Invalid or missing API key")
+                    .build();
+        }
+
+        List<CarEntity> cars = carRepository.getCarsByUserId(user.getId());
 
         if (cars.isEmpty()) {
             return Response.noContent().build();
         }
+
         return Response.ok(cars).build();
     }
 

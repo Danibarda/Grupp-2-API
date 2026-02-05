@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.Response;
 import org.API.entities.UserEntity;
 import org.API.repositories.UserRepository;
 
-@Path("/users")
+@Path("api/users")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
@@ -20,15 +20,6 @@ public class UserResource {
     @POST
     @Transactional
     public Response createUser(UserEntity user) {
-
-        // Check if API key already exists
-        if (userRepository.existsByApiKey(user.getApiKey())) {
-            return Response
-                    .status(Response.Status.CONFLICT)
-                    .entity("API key already exists")
-                    .build();
-        }
-
         userRepository.save(user);
         return Response.status(Response.Status.CREATED).build();
     }

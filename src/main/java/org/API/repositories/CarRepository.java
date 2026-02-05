@@ -1,6 +1,5 @@
 package org.API.repositories;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.API.entities.CarEntity;
@@ -20,26 +19,18 @@ public class CarRepository {
     EntityManager em;
     
     public List<CarEntity> getAllCars() {
-        List<CarEntity> cars = new ArrayList<>();
-        cars = em.createQuery("SELECT c FROM CarEntity c", CarEntity.class)
+        return em.createQuery("SELECT c FROM CarEntity c", CarEntity.class)
                  .getResultList();
-        return cars;
     }
 
-
-    public Response getCarById(Long id) {
-        CarEntity car = em.find(CarEntity.class, id);
-        if(car == null) {
-            return Response.noContent().build();
-        }
-        return Response.ok(car).build();
+    public CarEntity getCarById(Long id) {
+        return em.find(CarEntity.class, id);
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
     public CarEntity createCar(CarEntity car) {
         em.persist(car);
-        return car;
-        
+        return car; 
     }
 
     @Transactional(Transactional.TxType.REQUIRED)

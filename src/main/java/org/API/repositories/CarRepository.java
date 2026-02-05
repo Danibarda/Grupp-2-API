@@ -17,6 +17,12 @@ public class CarRepository {
 
     @Inject
     EntityManager em;
+
+    public List<CarEntity> getCarsByUserId(Long userId) {
+        return em.createQuery("SELECT c FROM CarEntity c WHERE c.user.id = :userId", CarEntity.class)
+                 .setParameter("userId", userId)
+                 .getResultList();
+    }
     
     public List<CarEntity> getAllCars() {
         return em.createQuery("SELECT c FROM CarEntity c", CarEntity.class)

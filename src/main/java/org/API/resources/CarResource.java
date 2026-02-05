@@ -10,9 +10,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 
 import java.net.URI;
@@ -26,7 +24,6 @@ import org.API.repositories.CarRepository;
 import org.API.repositories.UserRepository;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 @Path("api/car")
 @Produces(MediaType.APPLICATION_JSON)
@@ -52,6 +49,17 @@ public class CarResource {
 
     public Response getCars() {
         List<CarEntity> cars = carRepository.getAllCars();
+
+        if (cars.isEmpty()) {
+            return Response.noContent().build();
+        }
+        return Response.ok(cars).build();
+    }
+
+    @GET
+    @Path("/user/{userId}")
+    public Response getCarsByUserId(@PathParam("userId") Long userId) {
+        List<CarEntity> cars = carRepository.getCarsByUserId(userId);
 
         if (cars.isEmpty()) {
             return Response.noContent().build();

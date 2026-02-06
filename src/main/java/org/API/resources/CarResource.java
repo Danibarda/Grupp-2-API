@@ -156,6 +156,7 @@ public class CarResource {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        return carRepository.updateMilage(id, updateMilage.getMilage());
+        CarEntity savedCar = carRepository.updateMilage(id, updateMilage.getMilage());
+        return Response.ok(savedCar).build();
     }
 }

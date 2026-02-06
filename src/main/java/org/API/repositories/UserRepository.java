@@ -50,17 +50,6 @@ public class UserRepository {
         em.persist(user);
     }
 
-    //Jag tror inte att den här metoden kommer behövas men vi kan låta den vara så länge.
-    public boolean existsByApiKey(String apiKey) {
-        Long count = em.createQuery(
-                "SELECT COUNT(u) FROM UserEntity u WHERE u.apiKey = :key",
-                Long.class)
-                .setParameter("key", apiKey)
-                .getSingleResult();
-
-        return count > 0;
-    }
-
     public UserEntity saveOrUpdate(UserEntity user) {
     if (user.getId() == null) {
         em.persist(user);

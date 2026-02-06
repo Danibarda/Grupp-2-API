@@ -45,13 +45,12 @@ public class CarRepository {
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public Response updateMilage(Long id, int milage) {
+    public CarEntity updateMilage(Long id, int milage) {
        CarEntity car = em.find(CarEntity.class, id);
          if(car == null) {
-              return Response.noContent().build();
+              return null;
          }
             car.setMilage(milage);
-            em.merge(car);
-            return Response.ok(car).build();
+            return em.merge(car);
     }
 }

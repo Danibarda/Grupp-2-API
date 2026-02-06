@@ -18,15 +18,14 @@ Ett Rest API byggt med Jakarta EE tillsammans med quarkus för att hantera bilar
   ## API-endpoints:
 
   ***Bilhantering***
-  - ***/api/car*** - Visa alla bilar
-  - ***/api/car/{id}*** - Visa bilar utifrån personligt ID
-  - ***/api/car*** - Lägg till ny bil (API-nyckel krävs)
-  - ***/api/car/{id}***	- Uppdatera miltal (API-nyckel krävs)
-  - ***/api/car/{id}***	- Radera vald bil (API-nyckel krävs)
+  - GET ***/api/car*** - Visa alla bilar med (API-nyckel krävs)
+  - GET ***/api/car/user/{id}*** - Visa bilar utifrån personligt ID (API-nyckel krävs)
+  - POST ***/api/car/*** - Lägg till ny bil (API-nyckel krävs)
+  - PATCH ***/api/car/{id}***	- Uppdatera miltal (API-nyckel krävs)
+  - DELETE ***/api/car/{id}***	- Radera vald bil (API-nyckel krävs)
  
   ***Användare***
-  - ***/api/users*** - Skapa ny användare
-  - ***/api/users/me*** - Hämta dina uppgifter (API-nyckel krävs)
+  - POST ***/api/users*** - Skapa ny användare
 
 ## Kör projektet
 ***Klona repo:t***

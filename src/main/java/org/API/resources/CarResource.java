@@ -41,7 +41,7 @@ public class CarResource {
     @APIResponse(responseCode = "200", description = "List of cars retrieved successfully")
     @APIResponse(responseCode = "204", description = "No cars found")
 
-    public Response getCars() {
+    public Response getCars(@HeaderParam("X-API-KEY") String apiKey) {
         List<CarEntity> cars = carRepository.getAllCars();
 
         if (cars.isEmpty()) {
@@ -49,7 +49,6 @@ public class CarResource {
         }
         return Response.ok(cars).build();
     }
-
 
     @GET
     @Path("/user")
@@ -72,16 +71,7 @@ public class CarResource {
         return Response.ok(cars).build();
     }
 
-    @GET
-    @Path("/{id}")
-    public Response getCarById(@PathParam("id") Long id) {
-        CarEntity car = carRepository.getCarById(id);
-
-        if (car == null) {
-            return Response.noContent().build();
-        }
-        return Response.ok(car).build();
-    }
+ 
 
     @POST
     public Response createCar(@HeaderParam("X-API-KEY") String apiKey, CarEntity car) throws URISyntaxException {
@@ -94,17 +84,59 @@ public class CarResource {
         return Response.created(createdUri).entity(car).build();
     }
 
+    
+
     @DELETE
     @Path("/{id}")
-    public Response deleteCar(@PathParam("id") Long id) {
-        carRepository.deleteCar(id);
-        return Response.noContent().build();
+    public Response deleteCar(@HeaderParam("X-API-KEY") String apiKey,
+            @PathParam("id") Long id) {
 
+        UserEntity user = userRepository.findByApiKey(apiKey);
+
+        if (user == null) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        CarEntity car = carRepository.getCarById(id);
+
+        if (car == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        if (!car.getUser().getId().equals(user.getId())) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        carRepository.deleteCar(id);
+
+        return Response.noContent().build();
     }
+
+    
 
     @PATCH
     @Path("/{id}")
-    public Response updateCar(@PathParam("id") Long id, UpdateMilage updateMilage) {
+    public Response updateCar(@HeaderParam("X-API-KEY") String apiKey,
+            @PathParam("id") Long id,
+            UpdateMilage updateMilage) {
+
+        UserEntity user = userRepository.findByApiKey(apiKey);
+
+        if (user == null) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        CarEntity car = carRepository.getCarById(id);
+
+        if (car == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        if (!car.getUser().getId().equals(user.getId())) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
         return carRepository.updateMilage(id, updateMilage.getMilage());
     }
+
 }

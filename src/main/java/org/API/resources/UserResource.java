@@ -20,18 +20,18 @@ public class UserResource {
     // @POST
     // @Transactional
     // public Response createUser(UserEntity user) {
-    //     userRepository.persist(user);
-    //     return Response.status(Response.Status.CREATED)
-    //             .entity(user)
-    //             .build();
+    // userRepository.persist(user);
+    // return Response.status(Response.Status.CREATED)
+    // .entity(user)
+    // .build();
     // }
 
     @POST
-@Transactional
-public Response createUser(UserEntity user) {
-    UserEntity savedUser = userRepository.saveOrUpdate(user);
-    return Response.status(Response.Status.CREATED).entity(savedUser).build();
-}
+    @Transactional
+    public Response createUser(UserEntity user) {
+        UserEntity savedUser = userRepository.saveOrUpdate(user);
+        return Response.status(Response.Status.CREATED).entity(savedUser).build();
+    }
 
     // Get user by API key
     // Behövs verkligen den här?

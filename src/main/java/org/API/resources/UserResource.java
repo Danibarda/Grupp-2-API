@@ -42,10 +42,10 @@ public class UserResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response loginUser(@HeaderParam("X-API-KEY")String apiKey){
 
-        if (!apiKey.equals("123") || apiKey.equals("8008")) {
+        if (!apiKey.equals("123") && !apiKey.equals("8008")) {
             return Response.status(Status.UNAUTHORIZED).entity("This id does not match an existing salesman").build();
         } 
             return Response.ok("Welcome " + userRepository.findByApiKey(apiKey).getUsername()).build();
         
     }
-}
+}   

@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import org.API.entities.UserEntity;
 import org.API.repositories.UserRepository;
 
@@ -30,8 +31,21 @@ public class UserResource {
     @APIResponse(responseCode = "400", description = "Invalid input / validation failed")
     public Response createUser(@Valid UserEntity user) {
         UserEntity savedUser = userRepository.saveOrUpdate(user);
-        return Response.status(Response.Status.CREATED)
+        return Response.status(Status.CREATED)
                 .entity(savedUser)
                 .build();
+    }
+
+    @POST
+    @Path("/login")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response loginUser(@HeaderParam("X-API-KEY")String apiKey){
+
+        if (!apiKey.equals("123") || apiKey.equals("8008")) {
+            return Response.status(Status.UNAUTHORIZED).entity("This id does not match an existing salesman").build();
+        } 
+            return Response.ok("Welcome " + userRepository.findByApiKey(apiKey).getUsername()).build();
+        
     }
 }

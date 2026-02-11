@@ -7,6 +7,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import org.API.dtos.DTOMapper;
+import org.API.dtos.UserDTO;
 import org.API.entities.UserEntity;
 import org.API.repositories.UserRepository;
 
@@ -27,12 +29,12 @@ public class UserResource {
     @POST
     @Transactional
     @Operation(summary = "Create a new user", description = "Create a new user to the system")
-    @APIResponse(responseCode = "201", description = "Successfully created a new user", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = UserEntity.class)))
+    @APIResponse(responseCode = "201", description = "Successfully created a new user", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = UserDTO.class)))
     @APIResponse(responseCode = "400", description = "Invalid input / validation failed")
     public Response createUser(@Valid UserEntity user) {
         UserEntity savedUser = userRepository.saveOrUpdate(user);
-        return Response.status(Status.CREATED)
-                .entity(savedUser)
+        return Response.status(Response.Status.CREATED)
+                .entity(DTOMapper.toUserDTO(savedUser))
                 .build();
     }
 

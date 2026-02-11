@@ -1,4 +1,4 @@
-/* package org.API;
+/*package org.API;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
@@ -6,4 +6,4 @@ import io.quarkus.test.junit.QuarkusIntegrationTest;
 class GreetingResourceIT extends GreetingResourceTest {
     
 }
- */
+*/

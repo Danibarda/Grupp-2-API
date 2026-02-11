@@ -9,6 +9,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import org.API.dtos.CarDTO;
+import org.API.dtos.DTOMapper;
 import org.API.entities.CarEntity;
 import org.API.entities.UpdateMilage;
 import org.API.entities.UserEntity;
@@ -34,7 +36,7 @@ public class CarResource {
     // GET ALL CARS
     @GET
     @Operation(summary = "Get all cars", description = "Retrieve a list of all cars in the system")
-    @APIResponse(responseCode = "200", description = "List of cars retrieved successfully", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = CarEntity[].class)))
+    @APIResponse(responseCode = "200", description = "List of cars retrieved successfully", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = CarDTO[].class)))
     @APIResponse(responseCode = "204", description = "No cars found")
     public Response getCars(@HeaderParam("X-API-KEY") String apiKey) {
 
@@ -43,14 +45,14 @@ public class CarResource {
         if (cars.isEmpty()) {
             return Response.noContent().build();
         }
-        return Response.ok(cars).build();
+        return Response.ok(DTOMapper.toCarDTOList(cars)).build();
     }
 
     // GET CARS BY USER
     @GET
     @Path("/user")
     @Operation(summary = "Get cars for selected user")
-    @APIResponse(responseCode = "200", description = "Filtered cars by user", content = @Content(schema = @Schema(implementation = CarEntity[].class)))
+    @APIResponse(responseCode = "200", description = "Filtered cars by user", content = @Content(schema = @Schema(implementation = CarDTO[].class)))
     @APIResponse(responseCode = "401", description = "Invalid or missing API key")
     @APIResponse(responseCode = "204", description = "User has no cars")
     public Response getCarsByUserApiKey(
@@ -70,13 +72,13 @@ public class CarResource {
             return Response.noContent().build();
         }
 
-        return Response.ok(cars).build();
+        return Response.ok(DTOMapper.toCarDTOList(cars)).build();
     }
 
     // CREATE
     @POST
     @Operation(summary = "Create new car", description = "Create a new car associated with the authenticated user")
-    @APIResponse(responseCode = "201", description = "Car successfully created", content = @Content(schema = @Schema(implementation = CarEntity.class)))
+    @APIResponse(responseCode = "201", description = "Car successfully created", content = @Content(schema = @Schema(implementation = CarDTO.class)))
     @APIResponse(responseCode = "401", description = "Invalid or missing API key")
     public Response createCar(
             @HeaderParam("X-API-KEY") String apiKey,
@@ -92,7 +94,7 @@ public class CarResource {
         car = carRepository.createCar(car);
 
         URI createdUri = new URI("api/car/" + car.getId());
-        return Response.created(createdUri).entity(car).build();
+        return Response.created(createdUri).entity(DTOMapper.toCarDTO(car)).build();
     }
 
     // DELETE
@@ -131,7 +133,7 @@ public class CarResource {
     @PATCH
     @Path("/{id}")
     @Operation(summary = "Update car milage")
-    @APIResponse(responseCode = "200", description = "Car successfully updated", content = @Content(schema = @Schema(implementation = CarEntity.class)))
+    @APIResponse(responseCode = "200", description = "Car successfully updated", content = @Content(schema = @Schema(implementation = CarDTO.class)))
     @APIResponse(responseCode = "401", description = "Invalid or missing API key")
     @APIResponse(responseCode = "403", description = "Not owner of car")
     @APIResponse(responseCode = "404", description = "Car not found")
@@ -157,6 +159,6 @@ public class CarResource {
         }
 
         CarEntity savedCar = carRepository.updateMilage(id, updateMilage.getMilage());
-        return Response.ok(savedCar).build();
+        return Response.ok(DTOMapper.toCarDTO(savedCar)).build();
     }
 }

@@ -77,6 +77,7 @@ public class CarResource {
 
     // CREATE
     @POST
+    @Path("/add-car")
     @Operation(summary = "Create new car", description = "Create a new car associated with the authenticated user")
     @APIResponse(responseCode = "201", description = "Car successfully created", content = @Content(schema = @Schema(implementation = CarDTO.class)))
     @APIResponse(responseCode = "401", description = "Invalid or missing API key")
